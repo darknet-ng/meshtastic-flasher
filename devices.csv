@@ -1,0 +1,6 @@
+make,model,display_name,device_image,firmware_name,chip,flash_mode,flash_instructions
+Heltec,v3,"Heltec v3","heltec_v3.png",heltec-v3,esp32-s3,false,""
+LilyGo,"T-Lora 2.1.6","LilyGo T-Lora 2.1.6","ttgo_v2.png",tlora-v2-1-1_6,esp32,false,""
+LilyGo,"T-Beam 1.1","LilyGo T-Beam v1.1",tbeam.png,tbeam,esp32,false,""
+LilyGo,"T-Deck","LilyGo T-Deck","tdeck.png",t-deck,esp32-s3,true,"While turning on, press and hold the trackball. Successful if screen remains black":w
+
