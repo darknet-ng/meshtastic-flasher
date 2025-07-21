@@ -1,4 +1,5 @@
 #!/bin/sh
+echo 1
 
 PYTHON=${PYTHON:-$(which python3 python|head -n 1)}
 CHANGE_MODE=false
@@ -14,6 +15,8 @@ else
     echo "Error: esptool not found"
     exit 1
 fi
+
+echo Esptool check complete
 
 # Usage info
 show_help() {

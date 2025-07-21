@@ -1,4 +1,4 @@
-import os, sys, csv, fnmatch
+import os, sys, csv, fnmatch 
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QGraphicsDropShadowEffect, QTextEdit
 from PyQt6.QtCore import QEvent, Qt, QProcess
 from PyQt6.QtGui import QColor
@@ -38,18 +38,19 @@ class WidgetFlash(QWidget):
         self.setLayout(layout)
 
         self.process = QProcess()
-        self.process.setWorkingDirectory('./firmware/')
         self.process.readyReadStandardOutput.connect(self.handleOutput)
         self.process.readyReadStandardError.connect(self.handleError)
 
     def runCommand(self):
         print("I'm running")
         if DeviceInfo.get_data('erase') == 'true':
-            flash_command = './device-install.sh -p ' + DeviceInfo.get_data("tty_port") + ' -f ' + DeviceInfo.get_data("firmware_erase")
+            flash_command = './device-install.sh'
+            flash_arguments = ['-p', DeviceInfo.get_data("tty_port"), '-f', DeviceInfo.get_data("firmware_erase")]
         else:
-            flash_command = './device-update.sh -p ' + DeviceInfo.get_data("tty_port") + ' -f ' + DeviceInfo.get_data("firmware_update")
-        print(flash_command)
-        self.process.start(flash_command)
+            flash_command = './device-update.sh'
+            flash_arguments = ['-p', DeviceInfo.get_data("tty_port"), '-f', DeviceInfo.get_data("firmware_update")]
+        self.process.setWorkingDirectory('./firmware')
+        self.process.start(flash_command, flash_arguments)
         print("I ran?")
 
     def handleOutput(self):

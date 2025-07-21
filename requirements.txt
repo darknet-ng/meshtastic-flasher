@@ -1,2 +1,5 @@
 PyQt6
 pyserial
+pytap2
+meshtastic[cli]
+esptool
