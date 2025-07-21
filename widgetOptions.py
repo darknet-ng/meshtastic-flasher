@@ -14,7 +14,7 @@ class WidgetOptions(QWidget):
         layout = QVBoxLayout()
 
         self.label = QLabel("Options")
-        self.label.setStyleSheet("background: rgba(0, 0, 0, 100); font-size: 24px;")
+        self.label.setStyleSheet("background: rgba(0, 0, 0, 100); color: white; font-size: 24px;")
         self.label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.label.setWordWrap(True)
         shadow_effect = QGraphicsDropShadowEffect()
@@ -30,7 +30,7 @@ class WidgetOptions(QWidget):
         layoutRight = QVBoxLayout()
 
         self.erase = QCheckBox("Erase device?")
-        self.erase.setStyleSheet("font-size: 24px;")
+        self.erase.setStyleSheet("font-size: 24px; color: white;")
         self.erase.setChecked(False)
 
         layoutLeft.addWidget(self.erase)

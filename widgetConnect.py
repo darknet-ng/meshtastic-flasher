@@ -19,7 +19,7 @@ class WidgetConnect(QWidget):
         layout = QVBoxLayout()
 
         self.label = QLabel('')
-        self.label.setStyleSheet("background: rgba(0, 0, 0, 100); font-size: 24px;")
+        self.label.setStyleSheet("background: rgba(0, 0, 0, 100); color: white; font-size: 24px;")
         self.label.setAlignment(Qt.AlignmentFlag.AlignHCenter | Qt.AlignmentFlag.AlignVCenter)
         self.label.setWordWrap(True)
         shadow_effect = QGraphicsDropShadowEffect()
