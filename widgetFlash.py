@@ -58,7 +58,7 @@ class WidgetFlash(QWidget):
 
     def addDarknet(self):
         darknet_command = ['-m', 'meshtastic', '--port', DeviceInfo.get_data('tty_port'), '--ch-set', 'name Darknet-NG', '--ch-set', 'psk iwXq4FC8fIxprWKPq663DRq6IYI3LsQ4uct3Y2e4Ukw=', '--ch-index', '3']
-        self.process.start(
+        self.process.start('python3', darknet_command)
 
     def handleOutput(self):
         output = self.process.readAllStandardOutput().data().decode()
