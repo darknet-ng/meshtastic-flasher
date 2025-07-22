@@ -27,7 +27,7 @@ class WidgetFlash(QWidget):
 
         self.outputDisplay = QTextEdit()
         self.outputDisplay.setReadOnly(True)
-        self.outputDisplay.setStyleSheet("color: white;")
+        self.outputDisplay.setStyleSheet("background: rgba( 0, 0, 0, 255); color: white;")
         layout.addWidget(self.outputDisplay)
 
         self.btn = QPushButton("Flash")
@@ -42,7 +42,6 @@ class WidgetFlash(QWidget):
         self.process.readyReadStandardError.connect(self.handleError)
 
     def runCommand(self):
-        print("I'm running")
         if DeviceInfo.get_data('erase') == 'true':
             flash_command = './device-install.sh'
             flash_arguments = ['-p', DeviceInfo.get_data("tty_port"), '-f', DeviceInfo.get_data("firmware_erase")]
@@ -51,7 +50,15 @@ class WidgetFlash(QWidget):
             flash_arguments = ['-p', DeviceInfo.get_data("tty_port"), '-f', DeviceInfo.get_data("firmware_update")]
         self.process.setWorkingDirectory('./firmware')
         self.process.start(flash_command, flash_arguments)
-        print("I ran?")
+        self.configureDevice()
+
+    def configureDevice(self):
+        region_command = ['-m', 'meshtastic', '--port', DeviceInfo.get_data('tty_port'), '--set', 'lora.region US']
+        self.process.start('python3', region_command) 
+
+    def addDarknet(self):
+        darknet_command = ['-m', 'meshtastic', '--port', DeviceInfo.get_data('tty_port'), '--ch-set', 'name Darknet-NG', '--ch-set', 'psk iwXq4FC8fIxprWKPq663DRq6IYI3LsQ4uct3Y2e4Ukw=', '--ch-index', '3']
+        self.process.start(
 
     def handleOutput(self):
         output = self.process.readAllStandardOutput().data().decode()
