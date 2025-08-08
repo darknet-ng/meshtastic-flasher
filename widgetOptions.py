@@ -1,6 +1,6 @@
 import os, sys, csv, fnmatch
 from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QGraphicsDropShadowEffect, QCheckBox
-from PyQt6.QtCore import QEvent, Qt
+from PyQt6.QtCore import QEvent, Qt, QProcess
 from PyQt6.QtGui import QColor
 from device_info import DeviceInfo
 
@@ -32,7 +32,6 @@ class WidgetOptions(QWidget):
         self.erase = QCheckBox("Erase device?")
         self.erase.setStyleSheet("font-size: 24px; color: white;")
         self.erase.setChecked(False)
-
         layoutLeft.addWidget(self.erase)
 
         layoutBody.addLayout(layoutLeft)
@@ -53,6 +52,5 @@ class WidgetOptions(QWidget):
             DeviceInfo.set_data("erase", "false")
         self.switch_to_flash_callback()
 
-    # Used to update individual widget on screen switch
     def showEvent(self, event: QEvent):
         super().showEvent(event)

@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QSt
 from PyQt6.QtGui import QColor
 from widgetMake import WidgetMake
 from widgetConnect import WidgetConnect
-from widgetOptions import WidgetOptions
+#from widgetOptions import WidgetOptions
 from widgetFlash import WidgetFlash
 
 class MainWindow(QMainWindow):
@@ -35,16 +35,16 @@ class MainWindow(QMainWindow):
         # Set up stacked widget to handle each screen
         self.stacked_widget =  QStackedWidget()
 
-        # Create each page of the flasher
+        # Create each page of the flasher, pass callbacks for back and forward switching
         self.widget_make = WidgetMake(self.switch_to_connect)
-        self.widget_connect = WidgetConnect(self.switch_to_options)
-        self.widget_options = WidgetOptions(self.switch_to_flash)
-        self.widget_flash = WidgetFlash(self.switch_to_make)
+        self.widget_connect = WidgetConnect(self.switch_to_make, self.switch_to_flash)
+        #self.widget_options = WidgetOptions(self.switch_to_flash)
+        self.widget_flash = WidgetFlash(self.switch_to_connect, self.switch_to_make)
 
         # Add each page to the stacked widget
         self.stacked_widget.addWidget(self.widget_make)
         self.stacked_widget.addWidget(self.widget_connect)
-        self.stacked_widget.addWidget(self.widget_options)
+        #self.stacked_widget.addWidget(self.widget_options)
         self.stacked_widget.addWidget(self.widget_flash)
 
         # Set starting widget
@@ -60,8 +60,8 @@ class MainWindow(QMainWindow):
     def switch_to_connect(self):
         self.stacked_widget.setCurrentWidget(self.widget_connect)
 
-    def switch_to_options(self):
-        self.stacked_widget.setCurrentWidget(self.widget_options)
+    #def switch_to_options(self):
+    #    self.stacked_widget.setCurrentWidget(self.widget_options)
 
     def switch_to_flash(self):
         self.stacked_widget.setCurrentWidget(self.widget_flash)

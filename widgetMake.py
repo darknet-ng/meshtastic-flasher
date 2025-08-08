@@ -26,16 +26,18 @@ class WidgetMake(QWidget):
             display_column = 0
 
             for row in reader:
-                device_btn.append(deviceButton(row["display_name"], row["device_image"], row["firmware_name"], self.device_select))
-                layout_btns.addWidget(device_btn[btn_index], display_column, display_row)
+                if len(row) != 0:
+                    if not row["make"].startswith('#'):
+                        device_btn.append(deviceButton(row["display_name"], row["device_image"], row["firmware_name"], self.device_select))
+                        layout_btns.addWidget(device_btn[btn_index], display_column, display_row)
 
-                btn_index += 1
+                        btn_index += 1
                 
-                if display_row == 0:
-                    display_row = 1
-                else:
-                    display_column = 1
-                    display_row = 0
+                        if display_row < 2:
+                            display_row = display_row + 1
+                        else:
+                            display_column = 1
+                            display_row = 0
                 
 
         widget_btns = QWidget()

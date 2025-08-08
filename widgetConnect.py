@@ -1,18 +1,15 @@
 import os, sys, csv, fnmatch
 import serial.tools.list_ports
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QPushButton, QGraphicsDropShadowEffect
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QCheckBox, QPushButton, QGraphicsDropShadowEffect
 from PyQt6.QtCore import QEvent, Qt
 from PyQt6.QtGui import QColor
 from device_info import DeviceInfo
 
 class WidgetConnect(QWidget):
-    def __init__(self, switch_to_options_callback):
+    def __init__(self, back_to_make_callback, switch_to_flash_callback):
         super().__init__()
-        self.firmware_erase = ""
-        self.firmware_update = ""
-        self.device = ""
-        self.tty_files = ""
-        self.switch_to_options_callback = switch_to_options_callback
+        self.back_to_make_callback = back_to_make_callback
+        self.switch_to_flash_callback = switch_to_flash_callback
         self.initUI()
 
     def initUI(self):
@@ -29,15 +26,61 @@ class WidgetConnect(QWidget):
         self.label.setGraphicsEffect(shadow_effect)
         layout.addWidget(self.label)
 
-        self.btn = QPushButton("Next")
-        self.btn.setStyleSheet("font-size: 24px")
-        self.btn.clicked.connect(self.goto_options)
-        layout.addWidget(self.btn)
+        layout_options = QHBoxLayout()
+
+        self.erase = QCheckBox("Erase device? This will erase Public and Private keys")
+        self.erase.setStyleSheet("font-size: 24px; color: red;")
+        self.erase.setChecked(True)
+        self.erase.stateChanged.connect(self.eraseToggle)
+        layout_options.addWidget(self.erase)
+        
+        # More thought on this is needed to properly implement
+        #self.backup = QCheckBox("Backup Private Key?")
+        #self.backup.setEnabled(False)
+        #self.backup.setStyleSheet("font-size: 24px; color: white;")
+        #self.backup.setChecked(False)
+        #layout_options.addWidget(self.backup)
+
+        layout.addLayout(layout_options)
+    
+        layout_buttons = QHBoxLayout()
+
+        self.back = QPushButton("Back")
+        self.back.setStyleSheet("font-size: 24px")
+        self.back.clicked.connect(self.back_to_make_callback)
+        layout_buttons.addWidget(self.back)
+
+        self.flash = QPushButton("Contine to Flash Device")
+        self.flash.setStyleSheet("font-size: 24px")
+        self.flash.clicked.connect(self.goto_flash)
+        layout_buttons.addWidget(self.flash)
+        
+        layout.addLayout(layout_buttons)
         self.setLayout(layout)
 
-    def goto_options(self):
+    def eraseToggle(self):
+        if self.erase.isChecked():
+            self.erase.setStyleSheet("font-size: 24px; color: red;")
+    #        self.backup.setEnabled(True)
+        else:
+            self.erase.setStyleSheet("font-size: 24px; color: white;")
+    #        self.backup.setChecked(False)
+    #        self.backup.setEnabled(False)
+
+    def goto_flash(self):
         self.get_device_tty()
-        self.switch_to_options_callback()
+        
+        #if self.backup.isChecked():
+        #    DeviceInfo.set_data('backup', 'true')
+        #else:
+        #    DeviceInfo.set_data('backup', 'false')
+
+        if self.erase.isChecked():
+            DeviceInfo.set_data('erase', 'true')
+        else:
+            DeviceInfo.set_data('erase', 'false')
+
+        self.switch_to_flash_callback()
 
     def get_firmware_file(self):
         directory = "./firmware/"
@@ -56,10 +99,12 @@ class WidgetConnect(QWidget):
         acm_usb_ports.sort()
         DeviceInfo.set_data("tty_port",acm_usb_ports[-1])
 
+
     # Used to update individual widget on screen switch
     def showEvent(self, event: QEvent):
         super().showEvent(event)
         
+        self.erase.setChecked(True)
         self.get_firmware_file()
 
         if DeviceInfo.get_data("flash_mode") == "true":
